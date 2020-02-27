@@ -34,6 +34,7 @@ function drawPoses(poses) {
   translate(width, 0); // move the left side of the image to the right
   scale(-1.0, 1.0);
   image(video, 0, 0, video.width, video.height);
+  background("rgba(255, 255, 255, 0.05)");
   drawKeypoints(poses);
   drawSkeleton(poses);
 }
@@ -43,7 +44,7 @@ function drawKeypoints(poses) {
   poses.forEach(pose =>
     pose.pose.keypoints.forEach(keypoint => {
       if (keypoint.score > 0.2) {
-        fill(0, 255, 0);
+        fill(255, keypoint.position.x,keypoint.position.y);
         noStroke();
         ellipse(keypoint.position.x, keypoint.position.y, 10, 10);
       }
@@ -57,7 +58,8 @@ function drawSkeleton(poses) {
     pose.skeleton.forEach(skeleton => {
       // skeleton is an array of two keypoints. Extract the keypoints.
       const [p1, p2] = skeleton;
-      stroke(255, 0, 0);
+      stroke(255,p1.score*255,p2.score*255);
+      strokeWeight(3);
       line(p1.position.x, p1.position.y, p2.position.x, p2.position.y);
     });
   });
